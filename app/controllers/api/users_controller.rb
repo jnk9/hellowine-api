@@ -31,7 +31,27 @@ class Api::UsersController < ApplicationController
     render json: { state: :error, message: e.message }, status: :bad_request
   end
 
+  def update
+    update_service = User::UpdateService.new(params['id'], user_params_params)
+
+    result = update_service.perform
+    @user = result.user
+
+    if result.success?
+      render json: @user
+    else
+      render json: {message: @user.errors}, status: :bad_request
+    end
+
+  rescue StandardError => e
+    render json: { state: :error, message: e.message }, status: :bad_request
+  end
+
   private
+
+  def user_params_params
+    params.require(:user).permit(User.allowed_attributes_update)
+  end
 
   def user_find
     @user = user_all.find(params[:id])
