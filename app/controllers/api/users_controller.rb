@@ -47,6 +47,20 @@ class Api::UsersController < ApplicationController
     render json: { state: :error, message: e.message }, status: :bad_request
   end
 
+  def destroy
+    delete_service = User::DeleteService.new(params['id'])
+    result = delete_service.perform
+
+    if result.success?
+      render json: { message: 'User deleted successfully'}
+    else
+      render json: {message: result._data}, status: :bad_request
+    end
+
+  rescue StandardError => e
+    render json: { state: :error, message: e.message }, status: :bad_request
+  end
+
   private
 
   def user_params_params
