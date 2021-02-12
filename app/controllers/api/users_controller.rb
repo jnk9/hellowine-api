@@ -10,6 +10,27 @@ class Api::UsersController < ApplicationController
     render json: @user
   end
 
+  def create
+    create_service = User::CreateService.new(
+      { 
+        email: params[:email], 
+        name: params[:name]
+      }
+    )
+
+    result = create_service.perform
+    @user = result.user
+
+    if result.success?
+      render json: @user
+    else
+      render json: {message: @user.errors}, status: :bad_request
+    end
+
+  rescue StandardError => e
+    render json: { state: :error, message: e.message }, status: :bad_request
+  end
+
   private
 
   def user_find
