@@ -6,7 +6,7 @@ class CreateOrders < ActiveRecord::Migration[5.2]
       t.integer :order_status, default: 0
       t.datetime :payment_date
       t.datetime :delivery_date
-      t.belongs_to :user, foreign_key: true
+      t.belongs_to :user, foreign_key: true, null: false
     end
   end
 end

@@ -54,7 +54,7 @@ class Api::UsersController < ApplicationController
     if result.success?
       render json: { message: 'User deleted successfully'}
     else
-      render json: {message: result._data}, status: :bad_request
+      render json: { state: :error, message: result._data}, status: :bad_request
     end
 
   rescue StandardError => e
@@ -68,7 +68,7 @@ class Api::UsersController < ApplicationController
   end
 
   def user_find
-    @user = user_all.find(params[:id])
+    @user = user_all.find_by_id(params[:id])
   end
 
   def user_all
