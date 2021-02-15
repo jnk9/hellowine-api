@@ -16,7 +16,7 @@ class Api::OrdersController < ApplicationController
     @order = result.order
 
     if result.success?
-      render json: @order
+      render json: {order: @order}
     else
       render json: { message: @order.errors }, status: :bad_request
     end
