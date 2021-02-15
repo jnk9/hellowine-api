@@ -1,0 +1,20 @@
+version: "3.7"
+
+x-baseapp:
+  &default-app
+  build:
+    context: .
+    dockerfile: dev.Dockerfile
+  volumes:
+    - ./:/var/www/app
+  env_file:
+    - dev.env
+services:
+  web:
+    tty: true
+    stdin_open: true
+    <<: *default-app
+    command: "bundle exec rails server -b '0.0.0.0'"
+    ports:
+      - 3000:3000
+  
